@@ -5,10 +5,12 @@
 #include "GUI_Paint.h"
 #include "LCD_1in3.h"
 #include "pico/stdlib.h"
+
 #include "world.h"
 #include "snake.h"
 #include "debug.h"
 #include "settings.h"
+#include "input.h"
 /*
 
 frames / speed? : events should happen not every frame - last clicked action (button) should be remembered and last should be applied at the beggining of loop
@@ -34,6 +36,8 @@ void game_initialize()
     world_initialize();
     // log("after world_initialize");
     snake_initialize();
+    // while(1);
+    // snake_create();
 
 }
 
@@ -50,7 +54,7 @@ bool update_frame()
     
     bool can_move = snake_move();
     // LCD_1IN3_Clear(color);
-        
+    return can_move;
 }
 
 //void game_restart()
@@ -70,7 +74,6 @@ void game_run()
 
     while(1)//input check
     {
-        void check_input();
         check_input();
     }
 }

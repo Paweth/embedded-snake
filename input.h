@@ -14,3 +14,4 @@ void on_joystick_up(uint gpio, uint32_t event_mask);
 void on_joystick_down(uint gpio, uint32_t event_mask);
 void on_joystick_right(uint gpio, uint32_t event_mask);
 void on_joystick_left(uint gpio, uint32_t event_mask);
+void check_input();

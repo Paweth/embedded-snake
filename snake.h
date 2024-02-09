@@ -34,7 +34,9 @@ extern struct vector2 direction_vectors[4];
 extern struct snake_body * snake;
 
 void snake_initialize();
+void snake_create();
+void snake_increment();
 enum DIRECTION check_direction(struct vector2 vector);
 void update_direction(int direction);
-struct cell * determine_cell_ahead();
+struct cell * determine_cell_ahead(struct cell * cell, enum DIRECTION direction);
 bool snake_move();

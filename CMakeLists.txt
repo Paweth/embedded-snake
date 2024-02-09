@@ -25,15 +25,13 @@ include_directories(waveshare-lib/Icm20948)
 include_directories(waveshare-lib/OLED)
 include_directories(waveshare-lib/Fonts)
 
+add_compile_options(-Werror -Wall)
+
 add_compile_options(--sysroot=/usr/arm-none-eabi)
-add_executable(program 
-    main.c
-    game.c
-    input.c
-    snake.c
-    world.c
-    drawing.c
-)
+
+aux_source_directory(. SOURCES)
+
+add_executable(program ${SOURCES})
 
 
 target_link_libraries(program PUBLIC pico_stdlib GUI Config LCD Infrared OLED Icm20948 Fonts)

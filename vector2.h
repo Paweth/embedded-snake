@@ -9,5 +9,5 @@ struct vector2
     int8_t y;
 };
 
-struct vector2 vector2_substract();
+struct vector2 vector2_subtract(struct vector2 vec1, struct vector2 vec2);
 bool vector2_compare(struct vector2 vec1, struct vector2 vec2);

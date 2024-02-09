@@ -50,51 +50,32 @@ void snake_initialize()
     snake->current_direction = DIRECTION_RIGHT;
 }
 
-void snake_increase_length()
-{
-    //if (tip->next - tip: determine direction where to generate cell)
-    if(snake->tip == NULL)//has only head
-    {
-        // if(snake->head->previous == NULL);
-        snake->tip = malloc(sizeof(struct snake_segment));
-        snake->head->previous = snake->tip;
-        snake->tip->next = snake->head;
-        struct vector2 new_cell_coords = {
-            .x = snake->head->cell->position.x,
-            .y = snake->head->cell->position.y};
-        // get_cell(int x, int y) 
-        // set_cell_color(, SNAKE_BODY_COLOR);
-    }
-    else //has tip
-    {
-        
-    }
-}
-
 void snake_create()//alternative snake_initialize
 {
     snake = malloc(sizeof(struct snake_body));
     snake->head = malloc(sizeof(struct snake_segment));
     snake->head->cell = get_cell(CELLS_AMOUNT/2, CELLS_AMOUNT/2);
-
     snake->head->cell->cell_type = CELL_OBSTACLE;
-
     set_cell_color(snake->head->cell, SNAKE_BODY_COLOR);
 
-    //loop n-times snake_increase_length()
+    for(int i = 0; i < settings.snake_initial_length - 1; i++)
+    {
+        snake_increment();
+    }
+}
 
-    snake->tip = malloc(sizeof(struct snake_segment));
-    snake->tip->cell = &cells[CELLS_AMOUNT/2][CELLS_AMOUNT/2 - 1];
-    snake->tip->cell->cell_type = CELL_OBSTACLE;
-    snake->tip->previous = NULL;//is necessary?
-    snake->tip->next = snake->head;
-
-    set_cell_color(snake->tip->cell, SNAKE_BODY_COLOR);    
-
-    snake->head->previous = snake->tip;
-    snake->head->next = NULL;//?
-
-    snake->current_direction = settings.snake_initial_direction;    
+void snake_increment()
+{
+    //lines 58-60 could be determine_cell_behind method / or make determine_opposite_direction method
+    struct vector2 current_direction_vector = direction_vectors[snake->current_direction];
+    struct vector2 new_position = vector2_subtract(snake->tip->cell->position, current_direction_vector);
+    struct cell * new_cell = get_cell(new_position.x, new_position.y);
+    snake->tip->previous = malloc(sizeof(struct snake_segment));
+    snake->tip->previous->cell = new_cell;
+    new_cell->cell_type = CELL_OBSTACLE;
+    set_cell_color(new_cell, SNAKE_BODY_COLOR);
+    snake->tip->previous->next = snake->tip;
+    snake->tip = snake->tip->previous;
 }
 
 //void place_snake_segment()
@@ -107,6 +88,7 @@ enum DIRECTION check_direction(struct vector2 vector)
     }
     return -1;//DIRECTION_NONE
 }
+
 void update_direction(int direction)
 {
     switch(direction)
@@ -146,22 +128,21 @@ void update_direction(int direction)
     }
 }
 
-struct cell * determine_cell_ahead()
+struct cell * determine_cell_ahead(struct cell * cell, enum DIRECTION direction)
 {
-    struct cell * current_cell = snake->head->cell;
-    struct vector2 new_cell_position = {.x = current_cell->position.x, .y = current_cell->position.y};
-    switch(snake->current_direction)
+    struct vector2 new_cell_position = {.x = cell->position.x, .y = cell->position.y};
+    switch(direction)
     {
         case(DIRECTION_UP):
         {
-            new_cell_position.y = current_cell->position.y - 1;
+            new_cell_position.y = cell->position.y - 1;
             if(new_cell_position.y >= CELLS_AMOUNT)
                 return NULL;
             break;
         }
         case(DIRECTION_DOWN):
         {
-            new_cell_position.y = current_cell->position.y + 1;
+            new_cell_position.y = cell->position.y + 1;
             if(new_cell_position.y < 0)
             {
                 if(settings.has_border)//impossible situation (border has cells that would cause collision before position.y would be so low)
@@ -177,18 +158,20 @@ struct cell * determine_cell_ahead()
         }
         case(DIRECTION_RIGHT):
         {
-            new_cell_position.x = current_cell->position.x + 1;
+            new_cell_position.x = cell->position.x + 1;
             if(new_cell_position.x >= CELLS_AMOUNT)
                 return NULL;
             break;
         }
         case(DIRECTION_LEFT):
         {
-            new_cell_position.x = current_cell->position.x - 1;
+            new_cell_position.x = cell->position.x - 1;
             if(new_cell_position.x < 0)
                 return NULL;
             break;
         }
+        case(DIRECTION_NONE):
+            return NULL;
     }
     struct cell * new_cell = get_cell(new_cell_position.x, new_cell_position.y);
     return new_cell;
@@ -200,7 +183,8 @@ bool snake_move()
     struct snake_segment * previous_head = snake->head;
     struct cell * cell_ahead;
 
-    cell_ahead = determine_cell_ahead();
+    //check if tip has CELL_TYPE of FOOD
+    cell_ahead = determine_cell_ahead(snake->head->cell, snake->current_direction);
 
     if(!cell_ahead || cell_ahead->cell_type == CELL_OBSTACLE)
     {
@@ -222,7 +206,7 @@ bool snake_move()
     cell_ahead->cell_type = CELL_OBSTACLE;
     snake->head->cell = cell_ahead;
     set_cell_color(cell_ahead, SNAKE_HEAD_COLOR);
-    LCD_1IN3_Display(BlackImage);
+    LCD_1IN3_Display(BlackImage);//should be invoked in update_frame? (if true)
     return true;
 }
 
