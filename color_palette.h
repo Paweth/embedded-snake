@@ -1,0 +1,12 @@
+#pragma once
+
+#define BACKGROUND_COLOR BACKGROUND_COLOR_NOKIA
+#define BORDER_COLOR BLUE
+
+#define SNAKE_HEAD_COLOR BLACK
+#define SNAKE_BODY_COLOR BLACK
+
+#define FOOD_COLOR RED
+
+//predefined colors
+#define BACKGROUND_COLOR_NOKIA 0x85b0

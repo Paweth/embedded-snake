@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include "pico/types.h"
 
+#include "snake.h"
+#include "vector2.h"
 
 #define RESOLUTION_X 240
 #define RESOLUTION_Y 240
@@ -12,7 +14,6 @@
 
 #define CELLS_AMOUNT RESOLUTION_X/CELL_SIZE
 
-
 enum CELL_TYPE
 {
     CELL_EMPTY,
@@ -20,23 +21,12 @@ enum CELL_TYPE
     CELL_FOOD
 };
 
-struct vector2
-{
-    uint8_t x;
-    uint8_t y;
-};
+
 
 struct cell
 {
     struct vector2 position;
     enum CELL_TYPE cell_type;
-};
-
-
-struct settings
-{
-    bool has_border;
-    uint speed;
 };
 
 extern struct cell cells[CELLS_AMOUNT][CELLS_AMOUNT];

@@ -3,11 +3,12 @@
 #include "hardware/gpio.h"
 #include "pico/stdio.h"
 #include "pico/stdlib.h"
+#include "DEV_Config.h"
+#include "GUI_Paint.h"
+#include "LCD_1in3.h"
+
 #include "input.h"
 #include "game.h"
-#include "waveshare-lib/Config/DEV_Config.h"
-#include "waveshare-lib/GUI/GUI_Paint.h"
-#include "waveshare-lib/LCD/LCD_1in3.h"
 #include "world.h"
 #include "debug.h"
 
@@ -15,23 +16,33 @@ UWORD *BlackImage;
 
 int main()
 {
+    // gpio_init(JOYSTICK_UP_PIN);
+    // gpio_init(JOYSTICK_DOWN_PIN);
+    // gpio_init(JOYSTICK_RIGHT_PIN);
+    // gpio_init(JOYSTICK_LEFT_PIN);
+    // gpio_set_dir(JOYSTICK_UP_PIN, GPIO_IN);
+    // gpio_set_dir(JOYSTICK_DOWN_PIN, GPIO_IN);
+    // gpio_set_dir(JOYSTICK_RIGHT_PIN, GPIO_IN);
+    // gpio_set_dir(JOYSTICK_LEFT_PIN, GPIO_IN);
+    //gpio_set_irq_callback(on_joystick_up);
+
+
+
+    //gpio_set_irq_enabled(JOYSTICK_UP_PIN, GPIO_IRQ_EDGE_RISE, true);
+    //gpio_set_irq_enabled(JOYSTICK_DOWN_PIN, GPIO_IRQ_EDGE_RISE, true);
+    //gpio_set_irq_enabled(JOYSTICK_RIGHT_PIN, GPIO_IRQ_EDGE_RISE, true);
+    //gpio_set_irq_enabled(JOYSTICK_LEFT_PIN, GPIO_IRQ_EDGE_RISE, true);
+
     if(DEV_Module_Init() != 0)
     {
         return -1;
     }
     LCD_1IN3_Init(HORIZONTAL);
     LCD_1IN3_Clear(WHITE);
-    gpio_set_irq_callback(on_joystick_up);
-    gpio_set_irq_callback(on_joystick_down);
-    gpio_set_irq_callback(on_joystick_right);
-    gpio_set_irq_callback(on_joystick_left);
-
-    gpio_set_irq_enabled(JOYSTICK_UP_PIN, GPIO_IRQ_EDGE_RISE, true);
-    gpio_set_irq_enabled(JOYSTICK_DOWN_PIN, GPIO_IRQ_EDGE_RISE, true);
-    gpio_set_irq_enabled(JOYSTICK_RIGHT_PIN, GPIO_IRQ_EDGE_RISE, true);
-    gpio_set_irq_enabled(JOYSTICK_LEFT_PIN, GPIO_IRQ_EDGE_RISE, true);
-    DEV_Delay_ms(100);
-
+    gpio_pull_up(JOYSTICK_UP_PIN);
+    gpio_pull_up(JOYSTICK_DOWN_PIN);
+    gpio_pull_up(JOYSTICK_RIGHT_PIN);
+    gpio_pull_up(JOYSTICK_LEFT_PIN);
     UDOUBLE Imagesize = LCD_1IN3_HEIGHT*LCD_1IN3_WIDTH*2;
     if((BlackImage = (UWORD *)malloc(Imagesize)) == NULL) {
         LCD_1IN3_Clear(RED);
@@ -46,13 +57,7 @@ int main()
 
     game_initialize();//settings
 
-    //game_run();
-    log("%d test", 4);
-
-    DEV_Delay_ms(2000);
-    log("test");
-
-
+    game_run();
 
     //LCD_1IN3_Display(BlackImage);
     //printf("Hello, world!\n");

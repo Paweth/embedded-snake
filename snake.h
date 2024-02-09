@@ -1,6 +1,10 @@
 #pragma once
 
 #include "pico/types.h"
+
+#include "world.h"
+#include "vector2.h"
+
 struct snake_segment
 {
     struct cell * cell;
@@ -12,7 +16,8 @@ struct snake_segment
 
 enum DIRECTION
 {
-    DIRECTION_TOP,
+    DIRECTION_NONE = -1,
+    DIRECTION_UP,
     DIRECTION_RIGHT,
     DIRECTION_DOWN,
     DIRECTION_LEFT
@@ -25,8 +30,11 @@ struct snake_body
     struct snake_segment * tip;
 };
 
+extern struct vector2 direction_vectors[4];
 extern struct snake_body * snake;
+
 void snake_initialize();
-void update_direction();
+enum DIRECTION check_direction(struct vector2 vector);
+void update_direction(int direction);
 struct cell * determine_cell_ahead();
 bool snake_move();

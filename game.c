@@ -1,12 +1,14 @@
+#include "game.h"
+
+#include <stdbool.h>
+#include <time.h>
 #include "GUI_Paint.h"
 #include "LCD_1in3.h"
 #include "pico/stdlib.h"
 #include "world.h"
 #include "snake.h"
-#include "game.h"
-#include <stdbool.h>
-#include <time.h>
 #include "debug.h"
+#include "settings.h"
 /*
 
 frames / speed? : events should happen not every frame - last clicked action (button) should be remembered and last should be applied at the beggining of loop
@@ -25,12 +27,13 @@ void game_initialize()
     // srand (iseed);
     settings.has_border = true;
     settings.speed = 1000;
+    settings.snake_initial_direction = DIRECTION_RIGHT;
+    settings.snake_initial_length = 5;
     // log("game_initialize");
     // Paint_DrawString_EN(1, 1, "ABC", &Font8, BLACK, WHITE);
     world_initialize();
     // log("after world_initialize");
     snake_initialize();
-    log("after snake_initialize");
 
 }
 
@@ -65,6 +68,10 @@ void game_run()
 
     add_repeating_timer_ms(settings.speed, update_frame, NULL, &timer);
 
-    while(1);
+    while(1)//input check
+    {
+        void check_input();
+        check_input();
+    }
 }
 

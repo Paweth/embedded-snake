@@ -1,11 +1,15 @@
 #include "world.h"
-#include "GUI_Paint.h"
-#include "LCD_1in3.h"
-#include "drawing.h"
+
+#include <stdlib.h>
 #include "pico/types.h"
 #include "pico/malloc.h"
-#include <stdlib.h>
+#include "GUI_Paint.h"
+#include "LCD_1in3.h"
+
+#include "color_palette.h"
+#include "drawing.h"
 #include "debug.h"
+#include "settings.h"
 /*
 cell representation:
 
@@ -53,13 +57,13 @@ void world_initialize()//world type: closed or open
             cells[j][i].position.x = i;
             cells[j][i].position.y = j;
             cells[j][i].cell_type = CELL_EMPTY;
-            set_cell_color(&cells[j][i], BLUE);
+            set_cell_color(&cells[j][i], BACKGROUND_COLOR);
             if(settings.has_border)
             {
                 if(j == 0 || j == CELLS_AMOUNT - 1 || i == 0 || i == CELLS_AMOUNT - 1)
                 {
                     cells[j][i].cell_type = CELL_OBSTACLE;
-                    set_cell_color(&cells[j][i], GREEN);//draw map border
+                    set_cell_color(&cells[j][i], BORDER_COLOR);//draw map border
                     // log("setting pixel\n");
                 }
             }
