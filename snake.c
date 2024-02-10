@@ -4,6 +4,7 @@
 #include "DEV_Config.h"
 #include "pico/malloc.h"
 #include "hardware/gpio.h"
+#include "pico/rand.h"
 #include "pico/time.h"
 #include "GUI_Paint.h"
 #include "LCD_1in3.h"
@@ -20,12 +21,14 @@
 
 //reverse y direction?
 //maps to DIRECTION enum values
+
 struct vector2 direction_vectors[4] = {
     {.x = 0, .y = -1},//up
     {.x = 1, .y = 0},//right
     {.x = 0, .y = 1},//down
     {.x = -1, .y = 0}//left
 };
+struct snake_body * snake;
 
 void snake_initialize()
 {
@@ -57,18 +60,13 @@ void snake_create()//alternative snake_initialize
     snake->head = malloc(sizeof(struct snake_segment));
     snake->head->cell = get_cell(CELLS_AMOUNT/2, CELLS_AMOUNT/2);
     snake->head->cell->cell_type = CELL_OBSTACLE;
-
     set_cell_color(snake->head->cell, SNAKE_BODY_COLOR);
-
-
-
 
     snake->tip = malloc(sizeof(struct snake_segment));
     snake->tip->cell = &cells[CELLS_AMOUNT/2][CELLS_AMOUNT/2 - 1];
     snake->tip->cell->cell_type = CELL_OBSTACLE;
     snake->tip->previous = NULL;//is necessary?
     snake->tip->next = snake->head;
-
     set_cell_color(snake->tip->cell, BLACK);    
 
     snake->head->previous = snake->tip;
@@ -77,7 +75,7 @@ void snake_create()//alternative snake_initialize
     snake->current_direction = DIRECTION_RIGHT;
 
 
-    for(int i = 0; i < settings.snake_initial_length - 1; i++)
+    for(int i = 0; i < settings.snake_initial_length - 2; i++)
     {
         snake_increment();
     }
@@ -110,11 +108,11 @@ enum DIRECTION check_direction(struct vector2 vector)
     return -1;//DIRECTION_NONE
 }
 
-void update_direction(int direction)
+void snake_update_direction()
 {
-    switch(direction)
+    switch(snake->input_direction)
     {
-        case(DIRECTION_UP):
+        case DIRECTION_UP:
         {
             if(snake->current_direction == DIRECTION_RIGHT || snake->current_direction == DIRECTION_LEFT)
             {
@@ -122,7 +120,7 @@ void update_direction(int direction)
             }
             break;
         }
-        case(DIRECTION_DOWN):
+        case DIRECTION_DOWN:
         {
             if(snake->current_direction == DIRECTION_RIGHT || snake->current_direction == DIRECTION_LEFT)
             {
@@ -130,7 +128,7 @@ void update_direction(int direction)
             }
             break;
         }
-        case(DIRECTION_RIGHT):
+        case DIRECTION_RIGHT:
         {
             if(snake->current_direction == DIRECTION_UP || snake->current_direction == DIRECTION_DOWN)
             {
@@ -138,12 +136,16 @@ void update_direction(int direction)
             }
             break;
         }
-        case(DIRECTION_LEFT):
+        case DIRECTION_LEFT:
         {
             if(snake->current_direction == DIRECTION_UP || snake->current_direction == DIRECTION_DOWN)
             {
                 snake->current_direction = DIRECTION_LEFT;
             }
+            break;
+        }
+        case DIRECTION_NONE:
+        {
             break;
         }
     }
@@ -204,14 +206,24 @@ bool snake_move()
     struct snake_segment * previous_head = snake->head;
     struct cell * cell_ahead;
 
+    snake_update_direction();
     //check if tip has CELL_TYPE of FOOD
-    cell_ahead = determine_cell_ahead(snake->head->cell, snake->current_direction);
+    cell_ahead = determine_cell_ahead(snake->head->cell, snake->current_direction);//TODO: can't enter cell that is currently occupied by snake but in following snake's move would be freed
 
-    if(!cell_ahead || cell_ahead->cell_type == CELL_OBSTACLE)
+    if(!cell_ahead)
     {
-        log("end game");
-        while(1);
+        log("error: cell is null");
+    }
+
+    if(cell_ahead->cell_type == CELL_OBSTACLE)
+    {
+        log("end game %u", (unsigned int)get_rand_32());
         return false;//end of game?
+    }
+    else if(cell_ahead->cell_type == CELL_FOOD)
+    {
+        cell_ahead->cell_type = CELL_OBSTACLE;//to change
+        place_food();
     }
 
     //can move ahead/forward
@@ -227,6 +239,7 @@ bool snake_move()
     cell_ahead->cell_type = CELL_OBSTACLE;
     snake->head->cell = cell_ahead;
     set_cell_color(cell_ahead, SNAKE_HEAD_COLOR);
+
     LCD_1IN3_Display(BlackImage);//should be invoked in update_frame? (if true)
     return true;
 }

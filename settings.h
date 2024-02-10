@@ -2,6 +2,8 @@
 
 #include "world.h"
 
+extern struct settings settings;
+
 struct settings
 {
     bool has_border;

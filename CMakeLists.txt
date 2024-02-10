@@ -34,7 +34,7 @@ aux_source_directory(. SOURCES)
 add_executable(program ${SOURCES})
 
 
-target_link_libraries(program PUBLIC pico_stdlib GUI Config LCD Infrared OLED Icm20948 Fonts)
+target_link_libraries(program PUBLIC pico_stdlib pico_rand GUI Config LCD Infrared OLED Icm20948 Fonts)
 pico_add_extra_outputs(program)
 
 pico_enable_stdio_usb(program 1)

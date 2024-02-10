@@ -32,24 +32,22 @@ void on_joystick_left(uint gpio, uint32_t event_mask)
 }
 void check_input()
 {
-    int direction = DIRECTION_NONE;
     int joystick_up_state = !gpio_get(JOYSTICK_UP_PIN);
     int joystick_down_state = !gpio_get(JOYSTICK_DOWN_PIN);
     int joystick_right_state = !gpio_get(JOYSTICK_RIGHT_PIN);
     int joystick_left_state = !gpio_get(JOYSTICK_LEFT_PIN);
-    if(joystick_up_state)
-        direction = DIRECTION_UP;
     //log("%u %u %u %u", joystick_up_state, joystick_down_state, joystick_right_state, joystick_left_state);
+    if(joystick_up_state)
+        snake->input_direction = DIRECTION_UP;
     if(joystick_down_state) 
-        direction = DIRECTION_DOWN;
+        snake->input_direction = DIRECTION_DOWN;
     if(joystick_right_state) 
-        direction = DIRECTION_RIGHT;
+        snake->input_direction = DIRECTION_RIGHT;
     if(joystick_left_state) 
-        direction = DIRECTION_LEFT;
-
-    if (direction != DIRECTION_NONE)
-    {
-        update_direction(direction);
-    }
+        snake->input_direction = DIRECTION_LEFT;
+    // if (snake->input_direction != DIRECTION_NONE)
+    // {
+    //     snake->input_direction = direction;
+    // }
  
 }

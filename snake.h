@@ -26,6 +26,7 @@ enum DIRECTION
 struct snake_body
 {
     enum DIRECTION current_direction;
+    enum DIRECTION input_direction;
     struct snake_segment * head;
     struct snake_segment * tip;
 };
@@ -37,6 +38,6 @@ void snake_initialize();
 void snake_create();
 void snake_increment();
 enum DIRECTION check_direction(struct vector2 vector);
-void update_direction(int direction);
+void snake_update_direction();
 struct cell * determine_cell_ahead(struct cell * cell, enum DIRECTION direction);
 bool snake_move();

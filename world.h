@@ -30,9 +30,11 @@ struct cell
 };
 
 extern struct cell cells[CELLS_AMOUNT][CELLS_AMOUNT];
-extern struct settings settings;
+
 
 int generate_random_int (int min_value, int max_value);
 struct vector2 get_cell_pixels(struct cell * cell);
 struct cell * get_cell(int x, int y);
+struct cell * get_random_cell();
+void place_food();
 void world_initialize();
