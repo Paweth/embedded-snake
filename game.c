@@ -30,14 +30,10 @@ void game_initialize()
     settings.has_border = true;
     settings.speed = 1000;
     settings.snake_initial_direction = DIRECTION_RIGHT;
-    settings.snake_initial_length = 5;
-    // log("game_initialize");
-    // Paint_DrawString_EN(1, 1, "ABC", &Font8, BLACK, WHITE);
+    settings.snake_initial_length = 8;
+
     world_initialize();
-    // log("after world_initialize");
-    snake_initialize();
-    // while(1);
-    // snake_create();
+    snake_create();
 
 }
 

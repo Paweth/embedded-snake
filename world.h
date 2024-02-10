@@ -10,7 +10,7 @@
 #define RESOLUTION_X 240
 #define RESOLUTION_Y 240
 
-#define CELL_SIZE 4 //how many pixels per cell
+#define CELL_SIZE 8 //how many pixels per cell
 
 #define CELLS_AMOUNT RESOLUTION_X/CELL_SIZE
 

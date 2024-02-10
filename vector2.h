@@ -5,8 +5,8 @@
 
 struct vector2
 {
-    int8_t x;
-    int8_t y;
+    int16_t x;
+    int16_t y;
 };
 
 struct vector2 vector2_subtract(struct vector2 vec1, struct vector2 vec2);

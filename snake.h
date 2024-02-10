@@ -17,10 +17,10 @@ struct snake_segment
 enum DIRECTION
 {
     DIRECTION_NONE = -1,
-    DIRECTION_UP,
-    DIRECTION_RIGHT,
-    DIRECTION_DOWN,
-    DIRECTION_LEFT
+    DIRECTION_UP = 0,
+    DIRECTION_RIGHT = 1,
+    DIRECTION_DOWN = 2,
+    DIRECTION_LEFT = 3
 };
 
 struct snake_body

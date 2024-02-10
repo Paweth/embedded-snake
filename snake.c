@@ -1,6 +1,7 @@
 #include "snake.h"
 
 #include <stdlib.h>
+#include "DEV_Config.h"
 #include "pico/malloc.h"
 #include "hardware/gpio.h"
 #include "pico/time.h"
@@ -56,12 +57,31 @@ void snake_create()//alternative snake_initialize
     snake->head = malloc(sizeof(struct snake_segment));
     snake->head->cell = get_cell(CELLS_AMOUNT/2, CELLS_AMOUNT/2);
     snake->head->cell->cell_type = CELL_OBSTACLE;
+
     set_cell_color(snake->head->cell, SNAKE_BODY_COLOR);
+
+
+
+
+    snake->tip = malloc(sizeof(struct snake_segment));
+    snake->tip->cell = &cells[CELLS_AMOUNT/2][CELLS_AMOUNT/2 - 1];
+    snake->tip->cell->cell_type = CELL_OBSTACLE;
+    snake->tip->previous = NULL;//is necessary?
+    snake->tip->next = snake->head;
+
+    set_cell_color(snake->tip->cell, BLACK);    
+
+    snake->head->previous = snake->tip;
+    snake->head->next = NULL;//?
+
+    snake->current_direction = DIRECTION_RIGHT;
+
 
     for(int i = 0; i < settings.snake_initial_length - 1; i++)
     {
         snake_increment();
     }
+
 }
 
 void snake_increment()
@@ -69,6 +89,7 @@ void snake_increment()
     //lines 58-60 could be determine_cell_behind method / or make determine_opposite_direction method
     struct vector2 current_direction_vector = direction_vectors[snake->current_direction];
     struct vector2 new_position = vector2_subtract(snake->tip->cell->position, current_direction_vector);
+    
     struct cell * new_cell = get_cell(new_position.x, new_position.y);
     snake->tip->previous = malloc(sizeof(struct snake_segment));
     snake->tip->previous->cell = new_cell;
