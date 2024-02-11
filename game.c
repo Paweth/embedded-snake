@@ -26,8 +26,6 @@ int color = GREEN;
 void game_initialize()
 {
     // unsigned int iseed = (unsigned int)time(NULL);
-    log("%u", (unsigned int)get_rand_32());
-    DEV_Delay_ms(2000);
     settings.has_border = true;
     settings.speed = 8;
     settings.snake_initial_direction = DIRECTION_RIGHT;
@@ -66,10 +64,5 @@ struct repeating_timer timer;
 void game_run()
 {
     add_repeating_timer_ms(1000/(settings.speed + settings.speed*settings.speed), update_frame, NULL, &timer);
-
-    while(1)//input check
-    {
-        check_input();
-    }
 }
 

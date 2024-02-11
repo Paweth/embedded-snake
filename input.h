@@ -10,4 +10,4 @@ enum GPIO_PINS
     JOYSTICK_LEFT_PIN = 16,
 };
 
-void check_input();
+void check_input(uint gpio, uint32_t event_mask);

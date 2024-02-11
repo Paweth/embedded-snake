@@ -24,14 +24,6 @@ int main()
     // gpio_set_dir(JOYSTICK_DOWN_PIN, GPIO_IN);
     // gpio_set_dir(JOYSTICK_RIGHT_PIN, GPIO_IN);
     // gpio_set_dir(JOYSTICK_LEFT_PIN, GPIO_IN);
-    //gpio_set_irq_callback(on_joystick_up);
-
-
-
-    //gpio_set_irq_enabled(JOYSTICK_UP_PIN, GPIO_IRQ_EDGE_RISE, true);
-    //gpio_set_irq_enabled(JOYSTICK_DOWN_PIN, GPIO_IRQ_EDGE_RISE, true);
-    //gpio_set_irq_enabled(JOYSTICK_RIGHT_PIN, GPIO_IRQ_EDGE_RISE, true);
-    //gpio_set_irq_enabled(JOYSTICK_LEFT_PIN, GPIO_IRQ_EDGE_RISE, true);
 
     if(DEV_Module_Init() != 0)
     {
@@ -43,6 +35,12 @@ int main()
     gpio_pull_up(JOYSTICK_DOWN_PIN);
     gpio_pull_up(JOYSTICK_RIGHT_PIN);
     gpio_pull_up(JOYSTICK_LEFT_PIN);
+
+    gpio_set_irq_enabled_with_callback(JOYSTICK_UP_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
+    gpio_set_irq_enabled_with_callback(JOYSTICK_DOWN_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
+    gpio_set_irq_enabled_with_callback(JOYSTICK_RIGHT_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
+    gpio_set_irq_enabled_with_callback(JOYSTICK_LEFT_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
+
     UDOUBLE Imagesize = LCD_1IN3_HEIGHT*LCD_1IN3_WIDTH*2;
     if((BlackImage = (UWORD *)malloc(Imagesize)) == NULL) {
         LCD_1IN3_Clear(RED);
@@ -59,8 +57,6 @@ int main()
 
     game_run();
 
-    //LCD_1IN3_Display(BlackImage);
-    //printf("Hello, world!\n");
     while (1);
     return 0;
 }

@@ -67,7 +67,7 @@ void snake_create()//alternative snake_initialize
     snake->tip->cell->cell_type = CELL_OBSTACLE;
     snake->tip->previous = NULL;//is necessary?
     snake->tip->next = snake->head;
-    set_cell_color(snake->tip->cell, BLACK);    
+    set_cell_color(snake->tip->cell, SNAKE_BODY_COLOR);    
 
     snake->head->previous = snake->tip;
     snake->head->next = NULL;//?
@@ -196,8 +196,7 @@ struct cell * determine_cell_ahead(struct cell * cell, enum DIRECTION direction)
         case(DIRECTION_NONE):
             return NULL;
     }
-    struct cell * new_cell = get_cell(new_cell_position.x, new_cell_position.y);
-    return new_cell;
+    return get_cell(new_cell_position.x, new_cell_position.y);
 }
 
 bool snake_move()
