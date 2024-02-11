@@ -29,7 +29,7 @@ void game_initialize()
     log("%u", (unsigned int)get_rand_32());
     DEV_Delay_ms(2000);
     settings.has_border = true;
-    settings.speed = 1;
+    settings.speed = 8;
     settings.snake_initial_direction = DIRECTION_RIGHT;
     settings.snake_initial_length = 8;
 

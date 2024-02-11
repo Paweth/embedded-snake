@@ -205,7 +205,7 @@ bool snake_move()
     struct snake_segment * previous_tip = snake->tip;
     struct snake_segment * previous_head = snake->head;
     struct cell * cell_ahead;
-
+    enum CELL_TYPE cell_ahead_type = CELL_OBSTACLE;//type to set
     snake_update_direction();
     //check if tip has CELL_TYPE of FOOD
     cell_ahead = determine_cell_ahead(snake->head->cell, snake->current_direction);//TODO: can't enter cell that is currently occupied by snake but in following snake's move would be freed
@@ -222,21 +222,28 @@ bool snake_move()
     }
     else if(cell_ahead->cell_type == CELL_FOOD)
     {
-        cell_ahead->cell_type = CELL_OBSTACLE;//to change
+        cell_ahead_type = CELL_OBSTACLE | CELL_FOOD;
         place_food();
     }
 
     //can move ahead/forward
-    previous_tip->cell->cell_type = CELL_EMPTY;
-    set_cell_color(previous_tip->cell, BACKGROUND_COLOR);
-    snake->tip = snake->tip->next;//new tip
-    snake->tip->previous = NULL;
-    free(previous_tip);
+    if(previous_tip->cell->cell_type & CELL_FOOD)
+    {
+        previous_tip->cell->cell_type = CELL_OBSTACLE;
+    }
+    else
+    {
+        previous_tip->cell->cell_type = CELL_EMPTY;
+        set_cell_color(previous_tip->cell, BACKGROUND_COLOR);
+        snake->tip = snake->tip->next;//new tip
+        snake->tip->previous = NULL;
+        free(previous_tip);
+    }
 
     snake->head->next = malloc(sizeof(struct snake_segment));
     snake->head = snake->head->next;//new head
     snake->head->previous = previous_head;
-    cell_ahead->cell_type = CELL_OBSTACLE;
+    cell_ahead->cell_type = cell_ahead_type;
     snake->head->cell = cell_ahead;
     set_cell_color(cell_ahead, SNAKE_HEAD_COLOR);
 

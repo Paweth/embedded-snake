@@ -16,12 +16,10 @@
 
 enum CELL_TYPE
 {
-    CELL_EMPTY,
-    CELL_OBSTACLE,
-    CELL_FOOD
+    CELL_EMPTY = 1,//0b001
+    CELL_OBSTACLE = 2,//0b010
+    CELL_FOOD = 4//0b100
 };
-
-
 
 struct cell
 {
@@ -30,7 +28,6 @@ struct cell
 };
 
 extern struct cell cells[CELLS_AMOUNT][CELLS_AMOUNT];
-
 
 int generate_random_int (int min_value, int max_value);
 struct vector2 get_cell_pixels(struct cell * cell);

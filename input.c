@@ -7,29 +7,6 @@
 #include "snake.h"
 #include "debug.h"
 
-void on_joystick_up(uint gpio, uint32_t event_mask)
-{
-    log("move up");
-    snake->current_direction = DIRECTION_UP;
-}
-
-void on_joystick_down(uint gpio, uint32_t event_mask)
-{
-    if(gpio == JOYSTICK_DOWN_PIN)
-        snake->current_direction = DIRECTION_DOWN;
-}
-
-void on_joystick_right(uint gpio, uint32_t event_mask)
-{
-    if(gpio == JOYSTICK_RIGHT_PIN)
-        snake->current_direction = DIRECTION_RIGHT;
-}
-
-void on_joystick_left(uint gpio, uint32_t event_mask)
-{
-    if(gpio == JOYSTICK_LEFT_PIN)
-        snake->current_direction = DIRECTION_LEFT;
-}
 void check_input()
 {
     int joystick_up_state = !gpio_get(JOYSTICK_UP_PIN);
