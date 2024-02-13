@@ -26,7 +26,7 @@ int color = GREEN;
 void game_initialize()
 {
     // unsigned int iseed = (unsigned int)time(NULL);
-    settings.has_border = true;
+    settings.has_border = false;
     settings.speed = 8;
     settings.snake_initial_direction = DIRECTION_RIGHT;
     settings.snake_initial_length = 8;

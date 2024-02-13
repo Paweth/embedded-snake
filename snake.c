@@ -159,38 +159,29 @@ struct cell * determine_cell_ahead(struct cell * cell, enum DIRECTION direction)
         case(DIRECTION_UP):
         {
             new_cell_position.y = cell->position.y - 1;
-            if(new_cell_position.y >= CELLS_AMOUNT)
-                return NULL;
+            if(new_cell_position.y < 0 && settings.has_border == false)
+                new_cell_position.y = CELLS_AMOUNT - 1;
             break;
         }
         case(DIRECTION_DOWN):
         {
             new_cell_position.y = cell->position.y + 1;
-            if(new_cell_position.y < 0)
-            {
-                if(settings.has_border)//impossible situation (border has cells that would cause collision before position.y would be so low)
-                {
-                    return NULL;
-                }
-                else //go to the other side of wall (+ invert direction)
-                {
-                    return NULL;
-                }
-            }                
+            if(new_cell_position.y >= CELLS_AMOUNT && settings.has_border == false)
+                new_cell_position.y = 0;            
             break;
         }
         case(DIRECTION_RIGHT):
         {
             new_cell_position.x = cell->position.x + 1;
-            if(new_cell_position.x >= CELLS_AMOUNT)
-                return NULL;
+            if(new_cell_position.x >= CELLS_AMOUNT && settings.has_border == false)
+                new_cell_position.x = 0;
             break;
         }
         case(DIRECTION_LEFT):
         {
             new_cell_position.x = cell->position.x - 1;
-            if(new_cell_position.x < 0)
-                return NULL;
+            if(new_cell_position.x < 0 && settings.has_border == false)
+                new_cell_position.x = CELLS_AMOUNT - 1;
             break;
         }
         case(DIRECTION_NONE):
