@@ -41,3 +41,4 @@ enum DIRECTION check_direction(struct vector2 vector);
 void snake_update_direction();
 struct cell * determine_cell_ahead(struct cell * cell, enum DIRECTION direction);
 bool snake_move();
+void snake_destroy();

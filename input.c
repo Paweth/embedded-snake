@@ -1,5 +1,6 @@
 #include "input.h"
 
+#include "game.h"
 #include "hardware/gpio.h"
 #include "pico/types.h"
 #include "stdio.h"
@@ -23,5 +24,7 @@ void check_input(uint gpio, uint32_t event_mask)
         case JOYSTICK_LEFT_PIN:
             snake->input_direction = DIRECTION_LEFT; 
             break;
+        case USER_KEY_A_PIN:
+            game_reset();
     }
 }

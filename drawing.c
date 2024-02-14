@@ -24,21 +24,7 @@ void set_cell_color(struct cell * cell, int color)
     
 }
 
-void initial_draw_snake(struct snake_body * body)
+void draw_text_f24(char * text, int position_x, int position_y)
 {
-    struct snake_segment * it = body->tip;
-    while(it != NULL)
-    {
-        set_cell_color(it->cell, BLACK);
-        it = it->next;
-    }
-}
-
-void redraw_snake(
-            struct snake_segment * old_tip,
-            struct snake_segment * new_head)
-{
-    //only draw new head cell and clear old tip cell
-    set_cell_color(new_head->cell, 1);
-    set_cell_color(old_tip->cell, 0);
+    Paint_DrawString_EN(position_x, position_y, text, &Font24, BLACK, WHITE);
 }

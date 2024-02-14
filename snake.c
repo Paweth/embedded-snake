@@ -72,8 +72,8 @@ void snake_create()//alternative snake_initialize
     snake->head->previous = snake->tip;
     snake->head->next = NULL;//?
 
-    snake->current_direction = DIRECTION_RIGHT;
-
+    snake->current_direction = settings.snake_initial_direction;
+    snake->input_direction = DIRECTION_NONE;
 
     for(int i = 0; i < settings.snake_initial_length - 2; i++)
     {
@@ -95,6 +95,7 @@ void snake_increment()
     set_cell_color(new_cell, SNAKE_BODY_COLOR);
     snake->tip->previous->next = snake->tip;
     snake->tip = snake->tip->previous;
+    snake->tip->previous = NULL;
 }
 
 //void place_snake_segment()
@@ -207,7 +208,6 @@ bool snake_move()
 
     if(cell_ahead->cell_type == CELL_OBSTACLE)
     {
-        log("end game %u", (unsigned int)get_rand_32());
         return false;//end of game?
     }
     else if(cell_ahead->cell_type == CELL_FOOD)
@@ -233,6 +233,7 @@ bool snake_move()
     snake->head->next = malloc(sizeof(struct snake_segment));
     snake->head = snake->head->next;//new head
     snake->head->previous = previous_head;
+    snake->head->next = NULL;
     cell_ahead->cell_type = cell_ahead_type;
     snake->head->cell = cell_ahead;
     set_cell_color(cell_ahead, SNAKE_HEAD_COLOR);
@@ -241,3 +242,20 @@ bool snake_move()
     return true;
 }
 
+void snake_destroy()
+{
+    struct snake_segment * current = snake->tip;
+    struct snake_segment * next = snake->tip;
+    // snake->head = NULL;
+    // snake->tip = NULL;
+    while(next != NULL)
+    {
+        current = next;
+        next = current->next;
+        // log("%p", (void*)current);
+        free(current);
+    }
+    free(snake);
+    snake = NULL;
+    
+}

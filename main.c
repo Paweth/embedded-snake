@@ -35,11 +35,13 @@ int main()
     gpio_pull_up(JOYSTICK_DOWN_PIN);
     gpio_pull_up(JOYSTICK_RIGHT_PIN);
     gpio_pull_up(JOYSTICK_LEFT_PIN);
+    gpio_pull_up(USER_KEY_A_PIN);
 
     gpio_set_irq_enabled_with_callback(JOYSTICK_UP_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
     gpio_set_irq_enabled_with_callback(JOYSTICK_DOWN_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
     gpio_set_irq_enabled_with_callback(JOYSTICK_RIGHT_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
     gpio_set_irq_enabled_with_callback(JOYSTICK_LEFT_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
+    gpio_set_irq_enabled_with_callback(USER_KEY_A_PIN, GPIO_IRQ_EDGE_FALL, true, check_input);
 
     UDOUBLE Imagesize = LCD_1IN3_HEIGHT*LCD_1IN3_WIDTH*2;
     if((BlackImage = (UWORD *)malloc(Imagesize)) == NULL) {
